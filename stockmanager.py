@@ -27,6 +27,12 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QComboBox, QPushB
 
 import sqlite3
 
+#---------imports for Qstringmodel Qcompleter------#
+import sys
+from PyQt5 import Qt
+from PyQt5.QtWidgets import QCompleter
+from  PyQt5.QtCore import QStringListModel
+
 try:
     conn = sqlite3.connect('stock.db')
     c = conn.cursor()
@@ -225,41 +231,43 @@ class stackedExample(QWidget):
         #self.stock_name_add = QLineEdit()
         #layout.addRow("Stock Name", self.stock_name_add)
 
-        #--------------drop down menu----------------------------------
-
-        self.lbl = QLabel("Existing Stock")
-
-        self.combo = QComboBox()
-        print('y')
-
-        #--tuples retrieved by manipulation function on combo_input----#
-        tuples=[]
-        tuples= mp.combo_input(self)
-        print('tuples')
-        print(tuples)
+        #--------------drop down menu---------------------------------#
+        #self.combo = QComboBox()
+        #--------------------------------------------------------tuples retrieved by manipulation function on combo_input-------------------------------#
+        #tuples=[]
+        #tuples= mp.combo_input(self)
 
         #---using listcomprehension----#
-        stockName=[]
-        stockName=[tup[0] for tup in tuples]
+        #stockName=[]
+        #stockName=[tup[0] for tup in tuples] # contains a list of stock names from database
         
-        for i in stockName:
+        #for i in stockName:
             
-            self.combo.addItem(i)
-            #print (i)
+            #self.combo.addItem(i)
+            
+        #self.combo.activated[str].connect(self.onActivated)
+        
+        #----------------------------------------------adding QStringModel to supply data to a QCompleter, itself used by QLineEdit-----------#
+        
+        def get_data(model):
+            model.setStringList(stockName)
 
-        #combo.move(50, 50)
-        #self.lbl.move(50, 150)
-        #print('y')
-        self.combo.activated[str].connect(self.onActivated)
-        #print('y')
-        
-        #self.stock_count_add = str(combo.currentText())
-        #print (self.stock_count_add)
-        
         self.stock_name_add = QLineEdit()
+        completer = QCompleter()
+        self.stock_name_add.setCompleter(completer)
+   
+        model = QStringListModel()
+        completer.setModel(model)
+        get_data(model)
+   
+        self.stock_name_add.show()
+#-----------------------------------------------------------------------#
+        
+        #self.stock_name_add = QLineEdit()
 
-        cin = self.combo.currentText()
-        print(cin)
+        #cin = self.combo.currentText()
+        #print(cin)
+        
         layout.addRow("Stock Name", self.stock_name_add)
     
         #------------------------------------------------------------
