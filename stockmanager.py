@@ -207,6 +207,9 @@ class stackedExample(QWidget):
         tabs.addTab(self.tab2, 'Reduce Quantity')
         tabs.addTab(self.tab3, 'Delete Stock')
 
+        
+        
+
         self.tab1UI()
         self.tab2UI()
         self.tab3UI()
@@ -219,13 +222,52 @@ class stackedExample(QWidget):
         self.ok_add = QPushButton('Add Stock', self)
         cancel = QPushButton('Re-enter', self)
 
-        self.stock_name_add = QLineEdit()
-        layout.addRow("Stock Name", self.stock_name_add)
+        #self.stock_name_add = QLineEdit()
+        #layout.addRow("Stock Name", self.stock_name_add)
 
+        #--------------drop down menu----------------------------------
+
+        self.lbl = QLabel("Existing Stock")
+
+        self.combo = QComboBox()
+        print('y')
+
+        #--tuples retrieved by manipulation function on combo_input----#
+        tuples=[]
+        tuples= mp.combo_input(self)
+        print('tuples')
+        print(tuples)
+
+        #---using listcomprehension----#
+        stockName=[]
+        stockName=[tup[0] for tup in tuples]
+        
+        for i in stockName:
+            
+            self.combo.addItem(i)
+            #print (i)
+
+        #combo.move(50, 50)
+        #self.lbl.move(50, 150)
+        #print('y')
+        self.combo.activated[str].connect(self.onActivated)
+        #print('y')
+        
+        #self.stock_count_add = str(combo.currentText())
+        #print (self.stock_count_add)
+        
+        self.stock_name_add = QLineEdit()
+
+        cin = self.combo.currentText()
+        print(cin)
+        layout.addRow("Stock Name", self.stock_name_add)
+    
         #------------------------------------------------------------
         self.stock_count_add = QLineEdit()
         layout.addRow("Quantity to add", self.stock_count_add)
-
+        #-------------------------------------------------------------------------
+        #----------changed from comboBox to combo down
+        layout.addWidget(self.combo)
         layout.addWidget(self.ok_add)
         layout.addWidget(cancel)
         self.tab1.setLayout(layout)

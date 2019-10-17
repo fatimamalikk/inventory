@@ -86,7 +86,19 @@ def remove_stock(name,date):
             myfile.write(a)
 
         conn.commit()
+#------------------drop down menu--------------------------
+def combo_input(self):
+    c.execute("SELECT name FROM stock")
 
+    result = []
+
+    for row in c.fetchall():
+        print(row)
+        result.append(row)
+        #result.append(row[0])
+        print (result)
+
+    return result
 #-------------------------------------
 #def show_stock():
 #    with conn:
