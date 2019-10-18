@@ -31,7 +31,7 @@ import sqlite3
 import sys
 from PyQt5 import Qt
 from PyQt5.QtWidgets import QCompleter
-from  PyQt5.QtCore import QStringListModel
+from PyQt5.QtCore import QStringListModel
 
 try:
     conn = sqlite3.connect('stock.db')
@@ -200,6 +200,9 @@ class stackedExample(QWidget):
 
         #Need to add the above details to table
 
+        #----------combo input append list----------#
+        #mp.combo_input.result.append((stock_name_inp))
+
     def stack2UI(self):
 
         layout = QHBoxLayout()
@@ -228,9 +231,6 @@ class stackedExample(QWidget):
         self.ok_add = QPushButton('Add Stock', self)
         cancel = QPushButton('Re-enter', self)
 
-        #self.stock_name_add = QLineEdit()
-        #layout.addRow("Stock Name", self.stock_name_add)
-
         #--------------drop down menu---------------------------------#
         #self.combo = QComboBox()
         #--------------------------------------------------------tuples retrieved by manipulation function on combo_input-------------------------------#
@@ -246,28 +246,32 @@ class stackedExample(QWidget):
             #self.combo.addItem(i)
             
         #self.combo.activated[str].connect(self.onActivated)
+        #cin = self.combo.currentText()
+        #print(cin)
         
         #----------------------------------------------adding QStringModel to supply data to a QCompleter, itself used by QLineEdit-----------#
-        
         def get_data(model):
+            print('GET DATA MODEL')
+            tuples=[]
+            tuples= mp.combo_input()
+            print('tuples recieved')
+            stockName=[]
+            stockName=[tup[0] for tup in tuples] # contains a list of stock names from database          
+            print('printing stockname')
+            #print(stockName)
             model.setStringList(stockName)
-
+            
         self.stock_name_add = QLineEdit()
+#--------------------------------------
         completer = QCompleter()
         self.stock_name_add.setCompleter(completer)
    
-        model = QStringListModel()
+        model = QStringListModel() 
         completer.setModel(model)
         get_data(model)
    
         self.stock_name_add.show()
-#-----------------------------------------------------------------------#
-        
-        #self.stock_name_add = QLineEdit()
-
-        #cin = self.combo.currentText()
-        #print(cin)
-        
+#-----------------------------------------------------------------------#     
         layout.addRow("Stock Name", self.stock_name_add)
     
         #------------------------------------------------------------
@@ -275,7 +279,7 @@ class stackedExample(QWidget):
         layout.addRow("Quantity to add", self.stock_count_add)
         #-------------------------------------------------------------------------
         #----------changed from comboBox to combo down
-        layout.addWidget(self.combo)
+        #layout.addWidget(self.combo)
         layout.addWidget(self.ok_add)
         layout.addWidget(cancel)
         self.tab1.setLayout(layout)
@@ -296,7 +300,28 @@ class stackedExample(QWidget):
         self.ok_red = QPushButton('Reduce Stock', self)
         cancel = QPushButton('Re-enter', self)
 
+
+
+        #--------------QCompleter() in QLineEdit()---------------------------------#
+        tuples=[]
+        tuples= mp.combo_input()
+
+        stockName=[]
+        stockName=[tup[0] for tup in tuples] # contains a list of stock names from database
+        
+        def get_data(model):
+            model.setStringList(stockName)
+
         self.stock_name_red = QLineEdit()
+        completer = QCompleter()
+        self.stock_name_red.setCompleter(completer)
+   
+        model = QStringListModel()
+        completer.setModel(model)
+        get_data(model)
+   
+        self.stock_name_red.show()
+        #-----------------------------------------------------------------------------#
         layout.addRow("Stock Name", self.stock_name_red)
 
         self.stock_count_red = QLineEdit()
@@ -316,7 +341,26 @@ class stackedExample(QWidget):
         self.ok_del = QPushButton('Delete Stock', self)
         cancel = QPushButton('Re-enter', self)
 
+        #--------------QCompleter() in QLineEdit()---------------------------------#
+        tuples=[]
+        tuples= mp.combo_input()
+
+        stockName=[]
+        stockName=[tup[0] for tup in tuples] # contains a list of stock names from database
+        
+        def get_data(model):
+            model.setStringList(stockName)
+
         self.stock_name_del = QLineEdit()
+        completer = QCompleter()
+        self.stock_name_del.setCompleter(completer)
+   
+        model = QStringListModel()
+        completer.setModel(model)
+        get_data(model)
+   
+        self.stock_name_del.show()
+        #-----------------------------------------------------------------------------#
         layout.addRow("Stock Name", self.stock_name_del)
         layout.addWidget(self.ok_del)
         layout.addWidget(cancel)
@@ -364,8 +408,8 @@ class stackedExample(QWidget):
     def stack3UI(self):
 
         table = mp.show_stock()
-        print('show')
-        print(table)
+        #print('show')
+        #print(table)
         layout = QVBoxLayout()
         self.srb = QPushButton()
         self.srb.setText("Get Search Result.")
@@ -514,9 +558,7 @@ class stackedExample(QWidget):
     def display(self, i):
         self.Stack.setCurrentIndex(i)
 
-
-
-
+    
 if __name__ == '__main__':
 
     import sys

@@ -8,6 +8,7 @@ c = conn.cursor()
 def insert_prod(name,q,cost, minQ, date):
     print ('insert function')
     with conn:
+        print('inside with conn')
         c.execute("SELECT quantity FROM stock WHERE name = :name",{'name':name})
         check = c.fetchone()
 
@@ -21,10 +22,17 @@ def insert_prod(name,q,cost, minQ, date):
             print(a)
             with open("transaction.txt", "a") as myfile:
                 myfile.write(a)
+        #------------------
+            #conn.commit()
+            #print('conn commited')
+        #conn.close()
+       # print('conn closed')
+        #conn = sqlite3.connect('stock.db')
+        #print('conn reopened')
         return 'Inserted the stock in DataBase'
     else:
         return 'Stock with same name already present.'
-
+    
 def show_stock():
     with conn:
         c.execute("SELECT * FROM stock")
@@ -37,6 +45,11 @@ def update_cost(name, cost,date):
         c.execute("""UPDATE stock SET cost = :cost
                     WHERE name = :name""",
                   {'name': name, 'cost': cost})
+    #-----------------------------------
+        #conn.commit()
+        #print('conn commited')
+        #conn.close()
+    #conn = sqlite3.connect('stock.db')
 
 
 def update_quantity(name, val, date):
@@ -67,14 +80,16 @@ def update_quantity(name, val, date):
         print('cost= ', int(cost))
         if (cost < msg)or (cost == msg):
             return True
+        #conn.commit()
+        #print('conn commited')
             
             #messagebox.showinfo('Alert', 'Minimum Quantity Reached. Please re-order now')
 
             #QMessageBox.about(self, "Alert", "Minimum Quantity Reached. Please re-order now.")
             #QtWidgets.QMessageBox.warning(self, 'Alert', 'Minimum Quantity Reached. Please re-order now.')
             #print('Minimum Quantity Reached. Please re-order now.')
-        
-
+        #conn.close()
+    #conn = sqlite3.connect('stock.db')
 
 def remove_stock(name,date):
     with conn:
@@ -85,20 +100,29 @@ def remove_stock(name,date):
         with open("transaction.txt", "a") as myfile:
             myfile.write(a)
 
-        conn.commit()
+        #conn.commit()
+        #print('conn commited')
+        #conn.close()
+    #conn = sqlite3.connect('stock.db')
 #------------------drop down menu--------------------------
-def combo_input(self):
+def combo_input():
+    print('inside combo_input function')
+         
+    print('inside conn of combo input')
+        
     c.execute("SELECT name FROM stock")
-
+    print('PRINTING FETCH ALL NOW')
+    #print(c.fetchall())
+        
     result = []
-
     for row in c.fetchall():
-        print(row)
         result.append(row)
-        #result.append(row[0])
-        print (result)
-
+    print('the result is:  ')
+    print (result)
+    print('returning result')
     return result
+
+
 #-------------------------------------
 #def show_stock():
 #    with conn:
